@@ -2,6 +2,15 @@
   command = "npm run build"
   publish = "dist"
 
+[build.environment]
+  # VITE_-prefixed variables are public by design: Vite inlines their values
+  # into the client bundle at build time, so Netlify's secrets scanner will
+  # always find them in dist/ (and in the committed .env.example). The Supabase
+  # publishable/anon key is meant to be exposed to the browser, with access
+  # controlled by the row-level security policies in
+  # supabase_final_hardened_migration.sql.
+  SECRETS_SCAN_OMIT_KEYS = "VITE_SUPABASE_URL,VITE_SUPABASE_PUBLISHABLE_KEY,VITE_SUPABASE_ANON_KEY"
+
 [[redirects]]
   from = "/*"
   to = "/index.html"
